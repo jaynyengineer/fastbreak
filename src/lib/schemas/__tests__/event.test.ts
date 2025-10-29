@@ -1,4 +1,4 @@
-import { eventSchema, venueSchema, eventFilterSchema, SPORT_TYPES } from '../event'
+import { eventSchema, venueSchema, eventFilterSchema } from '../event'
 
 describe('Event Schemas', () => {
   describe('venueSchema', () => {
