@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 import { updateEventSchema, UpdateEventInput, EventWithVenues } from '@/lib/schemas/events'
 import { updateEventAction, deleteEventAction } from '@/lib/actions/events'
 import { Button } from '@/components/ui/button'
@@ -69,14 +70,19 @@ export function EventEditForm({ event }: EventEditFormProps) {
       const result = await updateEventAction(event.id, data)
 
       if (!result.success) {
-        setErrorMessage(result.error || 'Failed to update event')
+        const errorMsg = result.error || 'Failed to update event'
+        setErrorMessage(errorMsg)
+        toast.error(errorMsg)
         return
       }
 
-      // Success - redirect to dashboard
+      // Success - show toast and redirect
+      toast.success('Event updated successfully!')
       router.push('/dashboard')
     } catch (error) {
-      setErrorMessage('An unexpected error occurred. Please try again.')
+      const message = 'An unexpected error occurred. Please try again.'
+      setErrorMessage(message)
+      toast.error(message)
       console.error('Event update error:', error)
     } finally {
       setIsLoading(false)
@@ -91,14 +97,19 @@ export function EventEditForm({ event }: EventEditFormProps) {
       const result = await deleteEventAction(event.id)
 
       if (!result.success) {
-        setErrorMessage(result.error || 'Failed to delete event')
+        const errorMsg = result.error || 'Failed to delete event'
+        setErrorMessage(errorMsg)
+        toast.error(errorMsg)
         return
       }
 
-      // Success - redirect to dashboard
+      // Success - show toast and redirect
+      toast.success('Event deleted successfully!')
       router.push('/dashboard')
     } catch (error) {
-      setErrorMessage('An unexpected error occurred. Please try again.')
+      const message = 'An unexpected error occurred. Please try again.'
+      setErrorMessage(message)
+      toast.error(message)
       console.error('Event deletion error:', error)
     } finally {
       setIsLoading(false)

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 import { createEventSchema, CreateEventInput } from '@/lib/schemas/events'
 import { createEventAction } from '@/lib/actions/events'
 import { Button } from '@/components/ui/button'
@@ -60,13 +61,17 @@ export function EventCreationForm() {
 
       if (!result.success) {
         setErrorMessage(result.error || 'Failed to create event')
+        toast.error(result.error || 'Failed to create event')
         return
       }
 
-      // Success - redirect to dashboard
+      // Success - show toast and redirect
+      toast.success(`Event "${data.name}" created successfully!`)
       router.push('/dashboard')
     } catch (error) {
-      setErrorMessage('An unexpected error occurred. Please try again.')
+      const message = 'An unexpected error occurred. Please try again.'
+      setErrorMessage(message)
+      toast.error(message)
       console.error('Event creation error:', error)
     } finally {
       setIsLoading(false)
