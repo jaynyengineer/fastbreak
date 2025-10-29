@@ -62,10 +62,10 @@ CREATE POLICY users_update_own ON public.users
   USING (auth.uid() = id)
   WITH CHECK (auth.uid() = id);
 
--- Events: Users can only select their own events
-CREATE POLICY events_select_own ON public.events
+-- Events: Users can view all events
+CREATE POLICY events_select_all ON public.events
   FOR SELECT
-  USING (auth.uid() = user_id);
+  USING (true);
 
 -- Events: Users can only insert their own events
 CREATE POLICY events_insert_own ON public.events
@@ -83,14 +83,10 @@ CREATE POLICY events_delete_own ON public.events
   FOR DELETE
   USING (auth.uid() = user_id);
 
--- Venues: Users can see venues for events they own
-CREATE POLICY venues_select_own ON public.venues
+-- Venues: Users can view all venues (for all visible events)
+CREATE POLICY venues_select_all ON public.venues
   FOR SELECT
-  USING (
-    event_id IN (
-      SELECT id FROM public.events WHERE user_id = auth.uid()
-    )
-  );
+  USING (true);
 
 -- Venues: Users can insert venues for events they own
 CREATE POLICY venues_insert_own ON public.venues
