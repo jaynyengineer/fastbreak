@@ -1,8 +1,3 @@
-/**
- * Server Actions for event management
- * All database operations happen server-side with proper authorization checks
- */
-
 'use server'
 
 import { createServerSupabaseClient } from '@/lib/supabase/server'
@@ -15,25 +10,19 @@ import {
   type EventWithVenues,
 } from '@/lib/schemas/events'
 
-/**
- * Create a new event with venues
- */
 export async function createEventAction(
   input: CreateEventInput
 ): Promise<ActionResponse<{ event_id: string }>> {
   return executeAction(async () => {
     const supabase = await createServerSupabaseClient()
 
-    // Validate input
     const validatedInput = createEventSchema.parse(input)
 
-    // Get current user
     const {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) throw new Error('User not authenticated')
 
-    // Start transaction: create event
     const { data: eventData, error: eventError } = await supabase
       .from('events')
       .insert({
@@ -50,7 +39,6 @@ export async function createEventAction(
     if (eventError) throw new Error(eventError.message || 'Failed to create event')
     if (!eventData) throw new Error('Failed to create event')
 
-    // Create venues for the event
     if (validatedInput.venues && validatedInput.venues.length > 0) {
       const venuesWithEventId = validatedInput.venues.map((venue) => ({
         event_id: eventData.id,
@@ -72,22 +60,17 @@ export async function createEventAction(
   })
 }
 
-/**
- * Get all events
- */
 export async function getEventsAction(): Promise<
   ActionResponse<EventWithVenues[]>
 > {
   return executeAction(async () => {
     const supabase = await createServerSupabaseClient()
 
-    // Get current user
     const {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) throw new Error('User not authenticated')
 
-    // Fetch all events with their venues
     const { data: events, error } = await supabase
       .from('events')
       .select(
@@ -119,22 +102,17 @@ export async function getEventsAction(): Promise<
   })
 }
 
-/**
- * Get a single event by ID with ownership verification
- */
 export async function getEventByIdAction(
   eventId: string
 ): Promise<ActionResponse<EventWithVenues>> {
   return executeAction(async () => {
     const supabase = await createServerSupabaseClient()
 
-    // Get current user
     const {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) throw new Error('User not authenticated')
 
-    // Fetch event with venues
     const { data: event, error } = await supabase
       .from('events')
       .select(
@@ -163,7 +141,6 @@ export async function getEventByIdAction(
     if (error) throw new Error('Event not found')
     if (!event) throw new Error('Event not found')
 
-    // Verify ownership
     if (event.user_id !== user.id) {
       throw new Error('Unauthorized: You do not own this event')
     }
@@ -172,9 +149,6 @@ export async function getEventByIdAction(
   })
 }
 
-/**
- * Update an event (ownership verified)
- */
 export async function updateEventAction(
   eventId: string,
   input: UpdateEventInput
@@ -182,13 +156,11 @@ export async function updateEventAction(
   return executeAction(async () => {
     const supabase = await createServerSupabaseClient()
 
-    // Get current user
     const {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) throw new Error('User not authenticated')
 
-    // Verify ownership - fetch event first
     const { data: existingEvent, error: fetchError } = await supabase
       .from('events')
       .select('user_id')
@@ -200,10 +172,8 @@ export async function updateEventAction(
       throw new Error('Unauthorized: You do not own this event')
     }
 
-    // Validate input (partial update allowed)
     const validatedInput = updateEventSchema.parse(input)
 
-    // Build update object with only provided fields
     const updateData: Record<string, unknown> = {}
     if (validatedInput.name !== undefined) updateData.name = validatedInput.name
     if (validatedInput.sport_type !== undefined)
@@ -214,7 +184,6 @@ export async function updateEventAction(
       updateData.description = validatedInput.description
     updateData.updated_at = new Date().toISOString()
 
-    // Update event
     const { error: updateError } = await supabase
       .from('events')
       .update(updateData)
@@ -222,12 +191,9 @@ export async function updateEventAction(
 
     if (updateError) throw new Error(updateError.message || 'Failed to update event')
 
-    // Handle venues update if provided
     if (validatedInput.venues && validatedInput.venues.length > 0) {
-      // Delete existing venues
       await supabase.from('venues').delete().eq('event_id', eventId)
 
-      // Insert new venues
       const venuesWithEventId = validatedInput.venues.map((venue) => ({
         event_id: eventId,
         name: venue.name,
@@ -246,22 +212,17 @@ export async function updateEventAction(
   })
 }
 
-/**
- * Delete an event (ownership verified)
- */
 export async function deleteEventAction(
   eventId: string
 ): Promise<ActionResponse<{ success: boolean }>> {
   return executeAction(async () => {
     const supabase = await createServerSupabaseClient()
 
-    // Get current user
     const {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) throw new Error('User not authenticated')
 
-    // Verify ownership - fetch event first
     const { data: existingEvent, error: fetchError } = await supabase
       .from('events')
       .select('user_id')
@@ -273,7 +234,6 @@ export async function deleteEventAction(
       throw new Error('Unauthorized: You do not own this event')
     }
 
-    // Delete event (venues will cascade delete due to foreign key)
     const { error: deleteError } = await supabase
       .from('events')
       .delete()

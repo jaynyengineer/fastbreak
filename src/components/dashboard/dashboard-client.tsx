@@ -21,7 +21,6 @@ export function DashboardClient({ initialEvents }: DashboardClientProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedSport, setSelectedSport] = useState<string>('')
 
-  // Client-side filtering
   const filteredEvents = useMemo(() => {
     return initialEvents.filter((event) => {
       const matchesSearch = event.name
@@ -35,10 +34,8 @@ export function DashboardClient({ initialEvents }: DashboardClientProps) {
 
   return (
     <div className="space-y-6">
-      {/* Search and Filter Bar */}
       <div className="bg-white p-4 rounded-lg shadow space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Search Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Search Events
@@ -52,7 +49,6 @@ export function DashboardClient({ initialEvents }: DashboardClientProps) {
             />
           </div>
 
-          {/* Sport Type Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Filter by Sport Type
@@ -74,7 +70,6 @@ export function DashboardClient({ initialEvents }: DashboardClientProps) {
         </div>
       </div>
 
-      {/* Events Grid */}
       <div>
         {filteredEvents.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
@@ -93,7 +88,6 @@ export function DashboardClient({ initialEvents }: DashboardClientProps) {
         )}
       </div>
 
-      {/* Results Info */}
       {filteredEvents.length > 0 && (
         <div className="text-sm text-gray-600 text-right">
           Showing {filteredEvents.length} of {initialEvents.length} event

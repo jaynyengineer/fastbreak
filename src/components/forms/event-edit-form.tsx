@@ -79,11 +79,10 @@ export function EventEditForm({ event }: EventEditFormProps) {
       // Success - show toast and redirect
       toast.success('Event updated successfully!')
       router.push('/dashboard')
-    } catch (error) {
+    } catch {
       const message = 'An unexpected error occurred. Please try again.'
       setErrorMessage(message)
       toast.error(message)
-      console.error('Event update error:', error)
     } finally {
       setIsLoading(false)
     }
@@ -106,11 +105,10 @@ export function EventEditForm({ event }: EventEditFormProps) {
       // Success - show toast and redirect
       toast.success('Event deleted successfully!')
       router.push('/dashboard')
-    } catch (error) {
+    } catch {
       const message = 'An unexpected error occurred. Please try again.'
       setErrorMessage(message)
       toast.error(message)
-      console.error('Event deletion error:', error)
     } finally {
       setIsLoading(false)
     }
@@ -120,21 +118,18 @@ export function EventEditForm({ event }: EventEditFormProps) {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          {/* Error Message */}
           {errorMessage && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-800">{errorMessage}</p>
             </div>
           )}
 
-          {/* Event Details Section */}
           <Card>
             <CardHeader>
               <CardTitle>Event Details</CardTitle>
               <CardDescription>Update your event information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Event Name */}
               <FormField
                 control={form.control}
                 name="name"
@@ -154,7 +149,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
                 )}
               />
 
-              {/* Sport Type */}
               <FormField
                 control={form.control}
                 name="sport_type"
@@ -180,7 +174,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
                 )}
               />
 
-              {/* Date and Time */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -217,7 +210,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
                 />
               </div>
 
-              {/* Description */}
               <FormField
                 control={form.control}
                 name="description"
@@ -240,7 +232,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
             </CardContent>
           </Card>
 
-          {/* Venues Section */}
           <Card>
             <CardHeader>
               <CardTitle>Venues</CardTitle>
@@ -249,7 +240,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
             <CardContent className="space-y-4">
               {fields.map((field, index) => (
                 <div key={field.id} className="p-4 border rounded-lg space-y-4 relative">
-                  {/* Remove button for multiple venues */}
                   {fields.length > 1 && (
                     <button
                       type="button"
@@ -262,7 +252,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
                   )}
 
                   <div className="pr-8 space-y-4">
-                    {/* Venue Name */}
                     <FormField
                       control={form.control}
                       name={`venues.${index}.name`}
@@ -281,7 +270,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
                       )}
                     />
 
-                    {/* Venue Address */}
                     <FormField
                       control={form.control}
                       name={`venues.${index}.address`}
@@ -300,7 +288,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
                       )}
                     />
 
-                    {/* Venue Capacity */}
                     <FormField
                       control={form.control}
                       name={`venues.${index}.capacity`}
@@ -327,7 +314,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
                 </div>
               ))}
 
-              {/* Add Venue Button */}
               {fields.length < 10 && (
                 <button
                   type="button"
@@ -352,7 +338,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
             </CardContent>
           </Card>
 
-          {/* Form Actions */}
           <div className="flex gap-4">
             <Button type="submit" disabled={isLoading} className="flex-1">
               {isLoading ? 'Updating Event...' : 'Update Event'}
@@ -379,7 +364,6 @@ export function EventEditForm({ event }: EventEditFormProps) {
         </form>
       </Form>
 
-      {/* Delete Confirmation Dialog */}
       <DeleteEventDialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}

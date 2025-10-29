@@ -81,21 +81,18 @@ export function EventCreationForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Error Message */}
         {errorMessage && (
           <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-sm text-red-800">{errorMessage}</p>
           </div>
         )}
 
-        {/* Event Details Section */}
         <Card>
           <CardHeader>
             <CardTitle>Event Details</CardTitle>
             <CardDescription>Basic information about your event</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Event Name */}
             <FormField
               control={form.control}
               name="name"
@@ -115,7 +112,6 @@ export function EventCreationForm() {
               )}
             />
 
-            {/* Sport Type */}
             <FormField
               control={form.control}
               name="sport_type"
@@ -141,7 +137,6 @@ export function EventCreationForm() {
               )}
             />
 
-            {/* Date and Time */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -178,7 +173,6 @@ export function EventCreationForm() {
               />
             </div>
 
-            {/* Description */}
             <FormField
               control={form.control}
               name="description"
@@ -201,7 +195,6 @@ export function EventCreationForm() {
           </CardContent>
         </Card>
 
-        {/* Venues Section */}
         <Card>
           <CardHeader>
             <CardTitle>Venues</CardTitle>
@@ -210,7 +203,6 @@ export function EventCreationForm() {
           <CardContent className="space-y-4">
             {fields.map((field, index) => (
               <div key={field.id} className="p-4 border rounded-lg space-y-4 relative">
-                {/* Remove button for multiple venues */}
                 {fields.length > 1 && (
                   <button
                     type="button"
@@ -223,7 +215,6 @@ export function EventCreationForm() {
                 )}
 
                 <div className="pr-8 space-y-4">
-                  {/* Venue Name */}
                   <FormField
                     control={form.control}
                     name={`venues.${index}.name`}
@@ -242,7 +233,6 @@ export function EventCreationForm() {
                     )}
                   />
 
-                  {/* Venue Address */}
                   <FormField
                     control={form.control}
                     name={`venues.${index}.address`}
@@ -261,7 +251,6 @@ export function EventCreationForm() {
                     )}
                   />
 
-                  {/* Venue Capacity */}
                   <FormField
                     control={form.control}
                     name={`venues.${index}.capacity`}
@@ -288,7 +277,6 @@ export function EventCreationForm() {
               </div>
             ))}
 
-            {/* Add Venue Button */}
             {fields.length < 10 && (
               <button
                 type="button"
@@ -313,7 +301,6 @@ export function EventCreationForm() {
           </CardContent>
         </Card>
 
-        {/* Form Actions */}
         <div className="flex gap-4">
           <Button type="submit" disabled={isLoading} className="flex-1">
             {isLoading ? 'Creating Event...' : 'Create Event'}

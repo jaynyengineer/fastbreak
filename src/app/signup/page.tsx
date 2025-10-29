@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 import Link from 'next/link'
 import { signupSchema, type SignupFormData } from '@/lib/schemas/auth-forms'
 import { signUpAction } from '@/lib/actions/auth'
@@ -42,17 +43,21 @@ export default function SignupPage() {
       const result = await signUpAction(data.email, data.password)
 
       if (isActionSuccess(result)) {
+        toast.success('Account created successfully! Redirecting to login...')
         setSuccess(true)
         // Redirect to login after a short delay
         setTimeout(() => {
           router.push('/login')
         }, 2000)
       } else {
-        setError(result.error)
+        const errorMsg = result.error || 'Failed to create account'
+        setError(errorMsg)
+        toast.error(errorMsg)
       }
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.')
-      console.error('Signup error:', err)
+    } catch {
+      const errorMsg = 'An unexpected error occurred. Please try again.'
+      setError(errorMsg)
+      toast.error(errorMsg)
     } finally {
       setIsLoading(false)
     }

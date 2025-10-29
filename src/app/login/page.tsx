@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 import Link from 'next/link'
 import { loginSchema, type LoginFormData } from '@/lib/schemas/auth-forms'
 import { signInAction } from '@/lib/actions/auth'
@@ -40,13 +41,17 @@ export default function LoginPage() {
       const result = await signInAction(data.email, data.password)
 
       if (isActionSuccess(result)) {
+        toast.success('Signed in successfully!')
         router.push('/dashboard')
       } else {
-        setError(result.error)
+        const errorMsg = result.error || 'Failed to sign in'
+        setError(errorMsg)
+        toast.error(errorMsg)
       }
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.')
-      console.error('Login error:', err)
+    } catch {
+      const errorMsg = 'An unexpected error occurred. Please try again.'
+      setError(errorMsg)
+      toast.error(errorMsg)
     } finally {
       setIsLoading(false)
     }
