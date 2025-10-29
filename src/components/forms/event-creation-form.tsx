@@ -39,7 +39,7 @@ export function EventCreationForm() {
     resolver: zodResolver(createEventSchema),
     defaultValues: {
       name: '',
-      sport_type: undefined,
+      sport_type: '',
       date: '',
       time: '',
       description: '',

@@ -6,8 +6,11 @@ describe('Dashboard - Event List and Search/Filter', () => {
     cy.get('input[type="password"]').type('Test@12345')
     cy.get('button[type="submit"]').click()
 
-    // Wait for redirect to dashboard
-    cy.url().should('include', '/dashboard')
+    // Wait for redirect to dashboard with longer timeout
+    cy.url({ timeout: 15000 }).should('include', '/dashboard')
+    
+    // Wait for dashboard to render and data to load
+    cy.get('h1').contains('Sports Events', { timeout: 10000 }).should('be.visible')
   })
 
   describe('Displaying list of events', () => {

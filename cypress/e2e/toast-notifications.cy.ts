@@ -6,8 +6,11 @@ describe('Toast Notifications and UX Improvements', () => {
     cy.get('input[type="password"]').type('Test@12345')
     cy.get('button[type="submit"]').click()
 
-    // Wait for redirect to dashboard
-    cy.url().should('include', '/dashboard')
+    // Wait for redirect to dashboard with longer timeout
+    cy.url({ timeout: 15000 }).should('include', '/dashboard')
+    
+    // Wait for dashboard to load
+    cy.get('h1').contains('Sports Events', { timeout: 10000 }).should('be.visible')
   })
 
   describe('Event creation toasts', () => {

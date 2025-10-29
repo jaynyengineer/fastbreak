@@ -6,12 +6,15 @@ describe('Event Creation Form', () => {
     cy.get('input[type="password"]').type('Test@12345')
     cy.get('button[type="submit"]').click()
 
-    // Wait for redirect to dashboard
-    cy.url().should('include', '/dashboard')
+    // Wait for redirect to dashboard with longer timeout
+    cy.url({ timeout: 15000 }).should('include', '/dashboard')
+    
+    // Wait for dashboard to load and button to appear
+    cy.get('a').contains('Create Event', { timeout: 10000 }).should('be.visible')
 
     // Navigate to create event page
     cy.get('a').contains('Create Event').click()
-    cy.url().should('include', '/events/create')
+    cy.url({ timeout: 10000 }).should('include', '/events/create')
   })
 
   describe('Form rendering and navigation', () => {

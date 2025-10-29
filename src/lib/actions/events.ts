@@ -93,6 +93,7 @@ export async function getEventsAction(): Promise<
         )
       `
       )
+      .eq('user_id', user.id)
       .order('date', { ascending: false })
 
     if (error) throw new Error(error.message || 'Failed to fetch events')
