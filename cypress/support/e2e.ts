@@ -18,6 +18,21 @@ Cypress.on('uncaught:exception', () => {
   return false
 })
 
+// Seed test data before running tests
+before(() => {
+  // Make request to seed test events
+  cy.request({
+    method: 'POST',
+    url: 'http://127.0.0.1:3000/api/seed-test-events',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    failOnStatusCode: false,
+  }).then((response) => {
+    cy.log(`Seeding response: ${response.status}`)
+  })
+})
+
 // Set viewport for consistent testing
 beforeEach(() => {
   cy.viewport(1280, 720)
