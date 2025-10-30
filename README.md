@@ -87,19 +87,6 @@ Project Structure (high-level)
 - `public` — static assets
 - `src/**/__tests__` — Jest test suites
 
-Deployment (Vercel)
--------------------
-1) Push the repo to GitHub, then import it into Vercel.
-2) Set the following environment variables in your Vercel Project Settings (create a `.env.local` with):
-	- `NEXT_PUBLIC_SUPABASE_URL`
-	- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-    - `SUPABASE_SERVICE_ROLE_KEY`
-	- (Optional server-side keys if used)
-3) For Supabase OAuth (Google):
-	- In Supabase Auth > URL Configurations, set Site URL to your Vercel domain (e.g., https://your-app.vercel.app)
-	- Add redirect URL: https://your-app.vercel.app/auth/callback
-	- If using Google, ensure the OAuth consent screen and client are configured to allow the Vercel domain and callback URL
-4) Redeploy after saving environment variables.
 
 
 
