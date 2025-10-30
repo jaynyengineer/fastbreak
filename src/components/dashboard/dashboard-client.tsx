@@ -15,18 +15,19 @@ import {
 
 interface DashboardClientProps {
   initialEvents: EventWithVenues[]
+  currentUserId: string
 }
 
-export function DashboardClient({ initialEvents }: DashboardClientProps) {
+export function DashboardClient({ initialEvents, currentUserId }: DashboardClientProps) {
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedSport, setSelectedSport] = useState<string>('')
+  const [selectedSport, setSelectedSport] = useState<string>('all')
 
   const filteredEvents = useMemo(() => {
     return initialEvents.filter((event) => {
       const matchesSearch = event.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
-      const matchesSport = selectedSport === '' || event.sport_type === selectedSport
+      const matchesSport = selectedSport === 'all' || event.sport_type === selectedSport
 
       return matchesSearch && matchesSport
     })
@@ -58,7 +59,7 @@ export function DashboardClient({ initialEvents }: DashboardClientProps) {
                 <SelectValue placeholder="All Sports" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Sports</SelectItem>
+                <SelectItem value="all">All Sports</SelectItem>
                 {SPORT_TYPES.map((sport) => (
                   <SelectItem key={sport} value={sport}>
                     {sport}
@@ -82,7 +83,7 @@ export function DashboardClient({ initialEvents }: DashboardClientProps) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
+              <EventCard key={event.id} event={event} currentUserId={currentUserId} />
             ))}
           </div>
         )}

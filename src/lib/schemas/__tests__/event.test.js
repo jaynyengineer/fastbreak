@@ -40,7 +40,7 @@ describe('Event Schemas', () => {
   describe('eventSchema', () => {
     const validEvent = {
       name: 'Championship Game',
-      sport_type: 'Soccer' as const,
+      sport_type: 'Soccer',
       date: '2025-11-15',
       time: '14:00',
       description: 'Final championship game',

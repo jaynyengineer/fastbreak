@@ -47,7 +47,7 @@ export function EventEditForm({ event }: EventEditFormProps) {
       name: event.name,
       sport_type: event.sport_type as typeof SPORT_TYPES[number],
       date: event.date,
-      time: event.time,
+      time: event.time.substring(0, 5), // Convert "17:30:00" to "17:30"
       description: event.description || '',
       venues: event.venues.map((v) => ({
         name: v.name,
@@ -301,7 +301,7 @@ export function EventEditForm({ event }: EventEditFormProps) {
                               min="1"
                               max="1000000"
                               {...field}
-                              onChange={(e) => field.onChange(Number(e.target.value))}
+                              onChange={(e) => field.onChange(e.target.value)}
                               disabled={isLoading}
                             />
                           </FormControl>

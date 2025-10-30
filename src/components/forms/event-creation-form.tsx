@@ -39,7 +39,7 @@ export function EventCreationForm() {
     resolver: zodResolver(createEventSchema),
     defaultValues: {
       name: '',
-      sport_type: '',
+  sport_type: 'Other',
       date: '',
       time: '',
       description: '',
@@ -264,7 +264,7 @@ export function EventCreationForm() {
                             min="1"
                             max="1000000"
                             {...field}
-                            onChange={(e) => field.onChange(Number(e.target.value))}
+                            onChange={(e) => field.onChange(e.target.value)}
                             disabled={isLoading}
                           />
                         </FormControl>

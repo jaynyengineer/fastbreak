@@ -6,9 +6,10 @@ import { Calendar, MapPin, Trophy } from 'lucide-react'
 
 interface EventCardProps {
   event: EventWithVenues
+  currentUserId?: string
 }
 
-export function EventCard({ event }: EventCardProps) {
+export function EventCard({ event, currentUserId }: EventCardProps) {
   const eventDate = new Date(event.date)
   const formattedDate = eventDate.toLocaleDateString('en-US', {
     weekday: 'short',
@@ -71,16 +72,26 @@ export function EventCard({ event }: EventCardProps) {
 
         {/* Actions */}
         <div className="flex gap-2 pt-2">
-          <Link href={`/events/${event.id}/edit`} className="flex-1">
-            <Button variant="outline" className="w-full">
-              Edit
-            </Button>
-          </Link>
-          <Link href={`/events/${event.id}`} className="flex-1">
-            <Button variant="default" className="w-full">
-              View
-            </Button>
-          </Link>
+          {currentUserId && event.user_id === currentUserId ? (
+            <>
+              <Link href={`/events/${event.id}/edit`} className="flex-1">
+                <Button variant="outline" className="w-full">
+                  Edit
+                </Button>
+              </Link>
+              <Link href={`/events/${event.id}`} className="flex-1">
+                <Button variant="default" className="w-full">
+                  View
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <Link href={`/events/${event.id}`} className="w-full">
+              <Button variant="default" className="w-full">
+                View Details
+              </Button>
+            </Link>
+          )}
         </div>
       </CardContent>
     </Card>

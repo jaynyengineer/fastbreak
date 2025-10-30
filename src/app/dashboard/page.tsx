@@ -4,6 +4,7 @@ import { getEventsAction } from '@/lib/actions/events'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { DashboardClient } from '@/components/dashboard/dashboard-client'
 import { EventCardSkeleton } from '@/components/dashboard/event-card-skeleton'
+import { LogoutButton } from '@/components/auth/logout-button'
 import type { EventWithVenues } from '@/lib/schemas/events'
 
 export default async function DashboardPage() {
@@ -39,19 +40,22 @@ export default async function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold text-gray-900">Sports Events</h1>
-            <a
-              href="/events/create"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              + Create Event
-            </a>
+            <div className="flex items-center gap-4">
+              <a
+                href="/events/create"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+              >
+                + Create Event
+              </a>
+              <LogoutButton />
+            </div>
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Suspense fallback={<DashboardSkeleton />}>
-          <DashboardClient initialEvents={events} />
+          <DashboardClient initialEvents={events} currentUserId={user.id} />
         </Suspense>
       </main>
     </div>

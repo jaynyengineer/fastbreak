@@ -9,10 +9,10 @@ import { z } from 'zod'
 export const emailSchema = z
   .string()
   .min(1, 'Email is required')
+  .trim()
+  .toLowerCase()
   .email('Invalid email address')
   .max(255, 'Email must be less than 255 characters')
-  .toLowerCase()
-  .trim()
 
 /**
  * Password validation schema

@@ -93,7 +93,6 @@ export async function getEventsAction(): Promise<
         )
       `
       )
-      .eq('user_id', user.id)
       .order('date', { ascending: false })
 
     if (error) throw new Error(error.message || 'Failed to fetch events')
@@ -142,6 +141,54 @@ export async function getEventByIdAction(
     if (error) throw new Error('Event not found')
     if (!event) throw new Error('Event not found')
 
+    // No ownership check - anyone can view any event
+    return event as EventWithVenues
+  })
+}
+
+/**
+ * Get event by ID with ownership verification (for edit/delete operations)
+ */
+export async function getEventByIdWithOwnershipAction(
+  eventId: string
+): Promise<ActionResponse<EventWithVenues>> {
+  return executeAction(async () => {
+    const supabase = await createServerSupabaseClient()
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) throw new Error('User not authenticated')
+
+    const { data: event, error } = await supabase
+      .from('events')
+      .select(
+        `
+        id,
+        user_id,
+        name,
+        sport_type,
+        date,
+        time,
+        description,
+        created_at,
+        updated_at,
+        venues (
+          id,
+          name,
+          address,
+          capacity,
+          created_at
+        )
+      `
+      )
+      .eq('id', eventId)
+      .single()
+
+    if (error) throw new Error('Event not found')
+    if (!event) throw new Error('Event not found')
+
+    // Verify ownership
     if (event.user_id !== user.id) {
       throw new Error('Unauthorized: You do not own this event')
     }

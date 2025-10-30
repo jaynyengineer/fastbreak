@@ -61,6 +61,37 @@ export async function signInAction(
 }
 
 /**
+ * Server Action: Sign in with Google OAuth
+ * Returns the OAuth URL for client-side redirect
+ */
+export async function signInWithGoogleAction(): Promise<
+  ActionResponse<{ url: string }>
+> {
+  return executeAction(async () => {
+    const supabase = await createServerSupabaseClient()
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+      },
+    })
+
+    if (error) {
+      throw new Error(error.message || 'Failed to initiate Google sign in')
+    }
+
+    if (!data.url) {
+      throw new Error('No OAuth URL returned')
+    }
+
+    return {
+      url: data.url,
+    }
+  })
+}
+
+/**
  * Server Action: Sign out current user
  */
 export async function signOutAction(): Promise<ActionResponse<{ message: string }>> {

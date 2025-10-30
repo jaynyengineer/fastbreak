@@ -15,7 +15,7 @@ export const venueSchema = z.object({
     .max(500, 'Address must be less than 500 characters')
     .trim(),
   capacity: z
-    .number()
+    .coerce.number()
     .min(1, 'Capacity must be at least 1')
     .max(1000000, 'Capacity must be less than 1,000,000'),
 })
