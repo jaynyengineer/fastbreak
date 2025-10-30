@@ -70,10 +70,16 @@ export async function signInWithGoogleAction(): Promise<
   return executeAction(async () => {
     const supabase = await createServerSupabaseClient()
 
+    // Determine the base URL for OAuth redirects.
+    // Priority: explicit NEXT_PUBLIC_SITE_URL > Vercel env URL > localhost
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+        redirectTo: `${baseUrl}/auth/callback`,
       },
     })
 
