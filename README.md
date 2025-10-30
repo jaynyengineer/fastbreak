@@ -1,29 +1,3 @@
-## Fastbreak
-
-Fastbreak is a Next.js application for browsing and managing sports events. Users can sign up, sign in, create events with one or more venues, and view, edit, or delete their own events. The dashboard supports search and filtering by sport type for a smooth discovery experience.
-
-### Core features
-- Email/password authentication and Google OAuth (via Supabase)
-- Create, list, view, edit, and delete events you own
-- Multi-venue events with capacity and address details
-- Dashboard search and filter by sport type
-- Clean server actions abstraction with consistent ActionResponse results
-
-### Tech stack
-- Next.js 16 (App Router)
-- React 19
-- Supabase (Auth + Postgres)
-- Zod for input validation
-- Radix UI primitives and custom UI components
-- Jest + React Testing Library for unit/component tests
-
-## Getting started
-
-1) Install dependencies
-```bash
-npm install
-```
-
 Fastbreak — Sports Event Management (Next.js + Supabase)
 =======================================================
 
